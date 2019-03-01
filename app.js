@@ -6,6 +6,12 @@ const bodyParser = require('body-parser');
 const routes = require('./routes/routes'); // Imports routes for the products
 const app = express();
 
+app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+  });
+
 // Set up mongoose connection
 const mongoose = require('mongoose');
 let dev_db_url = 'mongodb://prashant:prashant1@ds349065.mlab.com:49065/productstutorial';
