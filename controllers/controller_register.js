@@ -9,26 +9,31 @@ var User = require('../models/user');//User collection with user.js schema
 
 exports.login=function(req, res) {
   User.getUserByEmail(email, function(err, user){ //getUserByEmail() function is defined in user.js file
-    if(err) throw err;
-    if(!user){
-      res.send('Unknown User');
-    }//If user has emailid which is present in database then password is matched.
+    var email = req.body.email;
+    var password = req.body.password;
+      if(err)
+      {console.log(err);
+        throw err;}
 
-    User.comparePassword(password, user.password, function(err, isMatch){//.comparePassword is defined in user.js file
-      if(err) return done(err);
-      if(isMatch){
-        res.send(user);
-      } else {
-        res.send('Invalid Password');
+      if(user==null){
+        res.send('Unknown User');
       }
+        if(user)
+        {
+          User.comparePassword(req.body.password, user.password, function(err, isMatch){//.comparePassword is defined in user.js file
+            if(err) return done(err);
+            if(isMatch){
+              res.send(user);
+              console.log('You are now logged in');
+            //  res.send('You are now logged in');
+            } else {
+              res.send('Invalid Password');
+            }
+        });
+      }//If user has emailid which is present in database then password is matched.
+
     });
-  });
-
-
- console.log('You are now logged in');
- res.send('You are now logged in');
 }
-
 
 
 //REGISTER FUNCTION
