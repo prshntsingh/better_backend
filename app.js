@@ -45,7 +45,7 @@ app.use(cookieParser());
 //user_register route
 app.use('/user_register',routes1);
 
-let port = 1235;
+let port = process.env.PORT || 1235;
 
 app.listen(port, () => {
     console.log('Server is up and running on port numner ' + port);
