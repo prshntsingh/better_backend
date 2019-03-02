@@ -8,9 +8,10 @@ var User = require('../models/user');//User collection with user.js schema
 //LOGIN FUNCTION
 
 exports.login=function(req, res) {
+  var email = req.body.email;
+  var password = req.body.password;
   User.getUserByEmail(email, function(err, user){ //getUserByEmail() function is defined in user.js file
-    var email = req.body.email;
-    var password = req.body.password;
+
       if(err)
       {console.log(err);
         throw err;}
@@ -64,7 +65,7 @@ exports.login=function(req, res) {
   req.checkBody('password2', 'Passwords do not match').equals(req.body.password).withMessage('Passwords do not match');
   var errors = req.validationErrors();//if it has validation errors then missing parameter is shown
   if (errors) {
-    res.status(400).send({ "message": "Missing parameter" });
+    res.status(400).send(errors);
   }
   else {
     User.findOne({email: req.body.email}, function (err, user) {//to check if email is already present in database
