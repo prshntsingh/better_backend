@@ -36,7 +36,22 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Validator
-app.use(expressValidator);
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
 //Cookie
 app.use(cookieParser());
 
@@ -45,7 +60,7 @@ app.use(cookieParser());
 //user_register route
 app.use('/user_register',routes1);
 
-let port = process.env.PORT || 1235;
+let port = process.env.Port || 1235;
 
 app.listen(port, () => {
     console.log('Server is up and running on port numner ' + port);
