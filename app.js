@@ -1,16 +1,16 @@
 // app.js
-
 const express = require('express');
 const bodyParser = require('body-parser');
-
-const routes = require('./routes/routes'); // Imports routes for the products
+const cookieParser=require('cookie-parser'); //for storing cookies
+const expressValidator = require('express-validator'); //for checkBody function
+const routes = require('./routes/routes');
+const routes1 = require('./routes/route_registration'); // Imports routes for the products
+const session = require('express-session');//for storing sessions
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const app = express();
 
-app.all('/*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    next();
-  });
+
 
 // Set up mongoose connection
 const mongoose = require('mongoose');
@@ -24,8 +24,28 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use('/api', routes);
+//Using Session
+app.use(session({
+  secret:'secret',
+  saveUninitialized: true,
+  resave: true
+}));
 
-let port = process.env.PORT || 1235;
+// Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Validator
+app.use(expressValidator);
+//Cookie
+app.use(cookieParser());
+
+
+
+//user_register route
+app.use('/user_register',routes1);
+
+let port = 1235;
 
 app.listen(port, () => {
     console.log('Server is up and running on port numner ' + port);

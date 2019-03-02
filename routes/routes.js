@@ -21,9 +21,11 @@ router.get('/about', function (req, res) {
 
   router.get('/show_post/:id', controller.show_post);
 
+    router.get('/:cid/show_posts_by_company', controller.show_posts_by_company);
+
   router.get('/:id/comment_by_id', controller.get_comment_by_id);
 
-  
+
   router.get('/:id/comments_by_articleid/', controller.comments_by_articleid);
 
   //router.put('/:id/add_comment', controller.add_comment);

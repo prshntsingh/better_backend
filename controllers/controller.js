@@ -61,6 +61,13 @@ exports.show_posts = function (req , res) {
     });
    };
 
+   exports.show_posts_by_company = function (req , res) {
+       Post.find({companyid:req.params.cid}).then(function (posts) {
+       res.send(posts);
+       });
+      };
+
+
 
 
 exports.show_post = function (req, res) {
@@ -93,7 +100,7 @@ exports.comments_by_articleid = function(req, res, next) {
 //     });
 //    };
 
-    
+
 
 // exports.get_comment_by_id = function (req , res) {
 //     Post.find({}).then(function (posts) {
