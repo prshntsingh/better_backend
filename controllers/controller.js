@@ -61,7 +61,7 @@ exports.post_create = function (req, res) {
         }
         res.send('post Created successfully')
     });
-    var logItem=req.body.username + " created a new post";
+    var logItem=req.body.username +" created a new post "+ req.body.title;
     let log = new Log(
         {
             item:logItem
