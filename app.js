@@ -9,12 +9,13 @@ const session = require('express-session');//for storing sessions
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const app = express();
-
-app.all('/*', function(req, res, next) {
+app.all('/*',function(req,res,next)
+{
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
 });
+
 
 // Set up mongoose connection
 const mongoose = require('mongoose');
@@ -64,7 +65,7 @@ app.use(cookieParser());
 //user_register route
 app.use('/user_register',routes1);
 
-let port = 1235;
+let port = process.env.PORT || 1235;
 
 app.listen(port, () => {
     console.log('Server is up and running on port numner ' + port);
