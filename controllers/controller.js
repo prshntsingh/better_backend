@@ -1,6 +1,6 @@
 const Comment = require('../models/Comments');
 const Post = require('../models/Post');
-
+const Log = require('../models/log');
 //Simple version, without validation or sanitation
 // exports.test = function (req, res) {
 //     res.send('Greetings from the Test controller!');
@@ -20,7 +20,7 @@ const Post = require('../models/Post');
 //         res.send('User Created successfully')
 //     })
 // };
-
+/*
 exports.post_create = function (req, res) {
     let post = new Post(
         {
@@ -36,7 +36,43 @@ exports.post_create = function (req, res) {
         }
         res.send('post Created successfully')
     })
+};*/
+exports.post_create = function (req, res) {
+    let post = new Post(
+        {
+            title: req.body.title,
+            content: req.body.content,
+            username: req.body.username,
+            companyid: req.body.companyid,
+            upvote: req.body.upvote,
+
+        }
+    );
+    var tagString=req.body.tag;
+    var tags= tagString.split(",");
+    for(var i=0;i<tags.length;i++)
+    {
+        //console.log(tags[i]+"\n");
+        post.tag.push(tags[i]);
+    }
+    post.save(function (err) {
+        if (err) {
+            return next(err);
+        }
+        res.send('post Created successfully')
+    });
+    var logItem=req.body.username + " created a new post";
+    let log = new Log(
+        {
+            item:logItem
+        });
+    log.save(function (err) {
+        if (err) {
+            return next(err);
+        }
+    })
 };
+
 
 exports.add_comment = function (req, res) {
     let comment = new Comment(
@@ -51,7 +87,18 @@ exports.add_comment = function (req, res) {
             return next(err);
         }
         res.send('comment added successfully')
+    });
+    var logItem=req.body.user + " Commented on " + req.params.id;
+    let log = new Log(
+        {
+            item:logItem
+        });
+    log.save(function (err) {
+        if (err) {
+            return next(err);
+        }
     })
+
 };
 
 
@@ -61,14 +108,22 @@ exports.show_posts = function (req , res) {
     });
    };
 
-   exports.show_posts_by_company = function (req , res) {
+exports.show_posts_by_company = function (req , res) {
        Post.find({companyid:req.params.cid}).then(function (posts) {
        res.send(posts);
        });
       };
 
+exports.search = function (req , res) {
 
+    var searchitem=req.body.searchitem;
+    var keywords=searchitem.split(" ");
+    console.log(searchitem);
+    Post.find({tag:{$in: keywords} }, function (err, post) {
+        res.send(post);
+    });
 
+};
 
 exports.show_post = function (req, res) {
     Post.findById(req.params.id, function (err, post) {
@@ -81,17 +136,23 @@ exports.get_comment_by_id = function (req, res) {
     Post.findById(req.params.id, function (err, post) {
         if (err) return next(err);
         res.send(post);
-    })
+    });
 };
 
 exports.comments_by_articleid = function(req, res, next) {
     Comment.find({articleid: req.params.id }, function (err, post) {
         if (err) return next(err);
-        console.log(post)
+        console.log(post);
         res.send(post);
-    })
+    });
 };
 
+exports.show_log = function (req , res) {
+    Log.find({}).then(function (logs) {
+        res.send(logs);
+    });
+
+};
 
 // exports.comments_by_articleid = function (req , res) {
 //     Comment.find({articleid: req.params.id}).then(function (comments) {

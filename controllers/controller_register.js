@@ -65,7 +65,7 @@ exports.login=function(req, res) {
   req.checkBody('password2', 'Passwords do not match').equals(req.body.password).withMessage('Passwords do not match');
   var errors = req.validationErrors();//if it has validation errors then missing parameter is shown
   if (errors) {
-    res.status(400).send(errors);
+    res.status(400).send({ "message": "Missing parameter" });
   }
   else {
     User.findOne({email: req.body.email}, function (err, user) {//to check if email is already present in database
