@@ -32,7 +32,7 @@ router.get('/about', function (req, res) {
 
   router.get('/:id/comments_by_articleid/', controller.comments_by_articleid);
 
-  router.get('/:cid/show_log', controller.show_log);
+  router.get('/show_log', controller.show_log);
 
    router.get('/:aid/upvotepost', controller.upvotepost);
 
