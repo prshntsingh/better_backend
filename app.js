@@ -9,6 +9,8 @@ const session = require('express-session');//for storing sessions
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const app = express();
+const multer=require('multer');
+
 app.all('/*',function(req,res,next)
 {
   res.header("Access-Control-Allow-Origin", "*");
@@ -70,3 +72,5 @@ let port = process.env.PORT || 1235;
 app.listen(port, () => {
     console.log('Server is up and running on port numner ' + port);
 });
+
+
