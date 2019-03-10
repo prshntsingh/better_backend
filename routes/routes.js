@@ -17,7 +17,7 @@ router.get('/about', function (req, res) {
 
   router.get('/show_channels', controller.show_channels);
 
-  // router.get('/show_post/:id', controller.show_post);
+  router.get('/show_channel/:id', controller.show_channel);
 
   // router.get('/:cid/show_posts_by_company', controller.show_posts_by_company);
 
